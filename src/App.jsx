@@ -14,6 +14,7 @@ import AddJobPage from "./pages/AddJobPage";
 import EditJobPage from "./pages/EditJobPage";
 
 const App = () => {
+  // Add Job
   const formSubmit = async (newJob) => {
     await fetch("/api/jobs", {
       method: "POST",
@@ -25,12 +26,15 @@ const App = () => {
     return;
   };
 
+  //Delete Job
   const deleteJob = async (id) => {
     await fetch(`/api/jobs/${id}`, {
       method: "DELETE",
     });
     return;
   };
+
+  //Update Job
   const updateJob = async (job) => {
     await fetch(`/api/jobs/${job.id}`, {
       method: "PUT",
