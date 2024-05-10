@@ -1,25 +1,29 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLoaderData, useNavigate, useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 
 // eslint-disable-next-line react/prop-types
-const AddJobPage = ({ addJobSubmit }) => {
-  const [type, setType] = useState("Full-Time");
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [salary, setSalary] = useState("Under $50K");
-  const [location, setLocation] = useState("");
-  const [company, setCompany] = useState("");
-  const [companyDesc, setCompanyDesc] = useState("");
-  const [companyEmail, setCompanyEmail] = useState("");
-  const [companyPhone, setCompanyPhone] = useState("");
+const EditJobPage = ({ updateJobSubmit }) => {
+  const job = useLoaderData();
+
+  const [type, setType] = useState(job.type);
+  const [title, setTitle] = useState(job.title);
+  const [description, setDescription] = useState(job.description);
+  const [salary, setSalary] = useState(job.salary);
+  const [location, setLocation] = useState(job.location);
+  const [company, setCompany] = useState(job.company.name);
+  const [companyDesc, setCompanyDesc] = useState(job.company.description);
+  const [companyEmail, setCompanyEmail] = useState(job.company.contactEmail);
+  const [companyPhone, setCompanyPhone] = useState(job.company.contactPhone);
 
   const navigate = useNavigate();
+  const { id } = useParams();
 
   const submitForm = (e) => {
     e.preventDefault();
 
-    const newJob = {
+    const updateJob = {
+      id,
       title,
       type,
       description,
@@ -32,11 +36,11 @@ const AddJobPage = ({ addJobSubmit }) => {
         contactPhone: companyPhone,
       },
     };
-    addJobSubmit(newJob);
+    updateJobSubmit(updateJob);
 
-    toast.success("Job Added Succesfully");
+    toast.success("Job Updated Succesfully");
 
-    return navigate("/jobs");
+    return navigate(`/jobs/${id}`);
   };
   return (
     <>
@@ -45,7 +49,7 @@ const AddJobPage = ({ addJobSubmit }) => {
           <div className="bg-white px-6 py-8 mb-4 shadow-md rounded-md border m-4 md:m-0">
             <form onSubmit={submitForm}>
               <h2 className="text-3xl text-center font-semibold mb-6">
-                Add Job
+                Update Job
               </h2>
 
               <div className="mb-4">
@@ -227,7 +231,7 @@ const AddJobPage = ({ addJobSubmit }) => {
                   className="bg-indigo-500 hover:bg-indigo-600 text-white font-bold py-2 px-4 rounded-full w-full focus:outline-none focus:shadow-outline"
                   type="submit"
                 >
-                  Add Job
+                  Update Job
                 </button>
               </div>
             </form>
@@ -238,4 +242,4 @@ const AddJobPage = ({ addJobSubmit }) => {
   );
 };
 
-export default AddJobPage;
+export default EditJobPage;
